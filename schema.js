@@ -18,11 +18,15 @@ exports.typeDefs = `
         joinedDate: String
         favorites: [Recipe]
     }
+    type Token{
+        token:String!
+    }
     type Query {
         getAllRecipes: [Recipe]
     }
 
     type Mutation {
         addRecipe(name: String!, description: String!, category: String!, instructions:String!, username: String): Recipe
+        signupUser(username: String! , email: String!, password: String!): Token
     }
 `;

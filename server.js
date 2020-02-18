@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 
 const bodyParser = require("body-parser"); //Json Requests and Responses
 
+const cors = require('cors'); // linking the react application to our backend
+
 require("dotenv").config({ path: "variables.env" });
 
 const Recipe = require("./models/Recipe");
@@ -32,6 +34,11 @@ mongoose
 //initialize application
 const app = express();
 
+const corsOptions = {
+    origin : 'http://localhost:3000',
+    credentials:true
+};
+app.use(cors(corsOptions))
 // Create GrapiQl application
 
 app.use("/graphiql", graphiqlExpress({ endpointURL: "/graphql" }));
