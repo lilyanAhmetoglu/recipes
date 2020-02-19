@@ -38,7 +38,7 @@ const corsOptions = {
     origin : 'http://localhost:3000',
     credentials:true
 };
-app.use(cors(corsOptions))
+app.use(cors(corsOptions)) //using the 3000 for react applciation
 // Create GrapiQl application
 
 app.use("/graphiql", graphiqlExpress({ endpointURL: "/graphql" }));
