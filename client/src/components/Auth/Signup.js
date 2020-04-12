@@ -2,7 +2,6 @@ import React from "react";
 import { ConnectionStates } from "mongoose";
 import { Mutation } from "react-apollo";
 import { SIGNUP_USER } from "../../queries";
-import Error from '../Error'
 
 const initialState = {
   username: "",
@@ -27,8 +26,9 @@ class signup extends React.Component {
 
   handleSubmit = (event, signupUser) => {
     event.preventDefault();
-    signupUser().then(data => {
+    signupUser().then(({data}) => {
       console.log(data);
+      localStorage.setItem('token' , data.signupUser.token);
       this.clearState(); // clearing data after submit
     });
   }
@@ -88,7 +88,7 @@ class signup extends React.Component {
                  
                   Submit
                 </button>
-                {error && <Error error={error}/>}
+                {error && error.message}
               </form>
             );
           }}

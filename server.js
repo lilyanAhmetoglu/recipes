@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 
 const bodyParser = require("body-parser"); //Json Requests and Responses
 
-const cors = require('cors'); // linking the react application to our backend
+const cors = require("cors"); // linking the react application to our backend
 
 require("dotenv").config({ path: "variables.env" });
 
@@ -22,37 +22,45 @@ const { resolvers } = require("./resolvers");
 //Create Schema
 const schema = makeExecutableSchema({
   typeDefs: typeDefs,
-  resolvers: resolvers
+  resolvers: resolvers,
 });
 
 //connect to database
 mongoose
   .connect(process.env.MONGO_URI, { autoIndex: false })
   .then(() => console.log("DB connected"))
-  .catch(err => console.log(err));
+  .catch((err) => console.log(err));
 
 //initialize application
 const app = express();
 
 const corsOptions = {
-    origin : 'http://localhost:3000',
-    credentials:true
+  origin: "http://localhost:3000",
+  credentials: true,
 };
-app.use(cors(corsOptions)) //using the 3000 for react applciation
-// Create GrapiQl application
+app.use(cors(corsOptions)); //using the 3000 for react applciation
 
+//set up JWT authentication middleware
+app.use(async (req, res, next) => {
+  const token = req.headers["authorization"]; // sending our token from local storage to backend
+  console.log(token); 
+  next(); // calling the next function in middleware chane >> this is too much important
+});
+
+// Create GrapiQl application
+// here we define /graphql as an end point for all my backend requests
 app.use("/graphiql", graphiqlExpress({ endpointURL: "/graphql" }));
 
-//connect shcemas with GrapgQL
+//connect shcemas with GrapgQL and with database
 app.use(
-  "/graphql",
+  "/graphql", // using this endpoint for my resolver reuqests and functions
   bodyParser.json(),
   graphqlExpress({
     schema,
     context: {
       Recipe,
-      User
-    }
+      User,
+    },
   })
 );
 
