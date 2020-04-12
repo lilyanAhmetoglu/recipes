@@ -11,6 +11,7 @@ import "./index.css";
 import App from "./components/App";
 import Signin from "./components/Auth/Signin";
 import Signup from "./components/Auth/Signup";
+import withSession from "./components/withSession";
 
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
@@ -31,7 +32,7 @@ const client = new ApolloClient({
   onError: ({ networkError }) => {
     if (networkError) {
       console.log("Network Error", networkError);
-     /* if (networkError.statusCode === 401) {
+      /* if (networkError.statusCode === 401) {
         localStorage.removeItem("token");
       }*/
     }
@@ -48,9 +49,11 @@ const Root = () => (
     </Switch>
   </Router>
 );
+
+const RootwithSession = withSession(Root);
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <Root />
+    <RootwithSession />
   </ApolloProvider>,
   document.getElementById("root")
 );

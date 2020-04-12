@@ -2,6 +2,8 @@ const express = require("express");
 
 const mongoose = require("mongoose");
 
+const jwt = require("jsonwebtoken");
+
 const bodyParser = require("body-parser"); //Json Requests and Responses
 
 const cors = require("cors"); // linking the react application to our backend
@@ -43,7 +45,15 @@ app.use(cors(corsOptions)); //using the 3000 for react applciation
 //set up JWT authentication middleware
 app.use(async (req, res, next) => {
   const token = req.headers["authorization"]; // sending our token from local storage to backend
-  console.log(token); 
+  if (token !== "null") {
+    try {
+      const currentUser = await jwt.verify(token, process.env.SECRET);
+      req.currentUser = currentUser;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  console.log("lily's token" + token);
   next(); // calling the next function in middleware chane >> this is too much important
 });
 
@@ -55,13 +65,14 @@ app.use("/graphiql", graphiqlExpress({ endpointURL: "/graphql" }));
 app.use(
   "/graphql", // using this endpoint for my resolver reuqests and functions
   bodyParser.json(),
-  graphqlExpress({
+  graphqlExpress(({ currentUser }) => ({
     schema,
     context: {
       Recipe,
       User,
+      currentUser,
     },
-  })
+  }))
 );
 
 const PORT = process.env.PORT || 4444;

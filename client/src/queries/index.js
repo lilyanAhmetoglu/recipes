@@ -13,6 +13,16 @@ export const GET_ALL_RECIPES = gql`
     }
   }
 `;
+/*User query */
+export const GET_CURRENT_USER = gql`
+  query {
+    getCurrentUser {
+      username
+      joinedDate
+      email
+    }
+  }
+`;
 
 /*Recipes Mutation */
 
