@@ -1,11 +1,40 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Link, NavLink } from "react-router-dom";
-const Navbar = () => {
-  return <nav>
-      <NavbarUnAuth />
-  </nav>;
+import Signout from '../components/Auth/Signout'
+const Navbar = ({ session }) => {
+  return (
+    <nav>
+      {session && session.getCurrentUser ? (
+        <NavbarAuth session={session} />
+      ) : (
+        <NavbarUnAuth />
+      )}
+    </nav>
+  );
 };
 
+const NavbarAuth = ({ session }) => (
+  <Fragment>
+    <ul>
+      <li>
+        <NavLink to="/">Home</NavLink>
+      </li>
+      <li>
+        <NavLink to="/search">Search</NavLink>
+      </li>
+      <li>
+        <NavLink to="/recipe/add">Add Recipe</NavLink>
+      </li>
+      <li>
+        <NavLink to="/profile">Profile</NavLink>
+      </li>
+      <li>
+        <Signout>Signout</Signout>
+      </li>
+    </ul>
+    <h4>Welcome, <strong>{session.getCurrentUser.username}</strong></h4>
+  </Fragment>
+);
 const NavbarUnAuth = () => (
   <ul>
     <li>
