@@ -2,7 +2,7 @@ import React from "react";
 import { ConnectionStates } from "mongoose";
 import { Mutation } from "react-apollo";
 import { SIGNUP_USER } from "../../queries";
-
+import {withRouter} from "react-router-dom"
 const initialState = {
   username: "",
   email: "",
@@ -26,10 +26,12 @@ class signup extends React.Component {
 
   handleSubmit = (event, signupUser) => {
     event.preventDefault();
-    signupUser().then(({data}) => {
+    signupUser().then(async({data}) => {
       console.log(data);
       localStorage.setItem('token' , data.signupUser.token);
+      await this.props.refetch();
       this.clearState(); // clearing data after submit
+      this.props.history.push('/')
     });
   }
 
@@ -98,4 +100,4 @@ class signup extends React.Component {
   }
 }
 
-export default signup;
+export default withRouter(signup) ;

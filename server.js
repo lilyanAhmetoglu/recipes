@@ -67,7 +67,7 @@ app.use(
   bodyParser.json(),
   graphqlExpress(({ currentUser }) => ({
     schema,
-    context: {
+    context: { //passing vars in context makes it available in resolver
       Recipe,
       User,
       currentUser,
