@@ -1,14 +1,19 @@
-import React from 'react';
-import {ApolloConsumer} from 'react-apollo'
-const Signout = () => (
+import React from "react";
+import { ApolloConsumer } from "react-apollo";
+import { withRouter } from "react-router-dom";
+
+const handleSignout = (client,history) => {
+  localStorage.setItem("token", "");
+  client.resetStore();
+  history.push('/')
+};
+
+const Signout = ({history}) => (
   <ApolloConsumer>
-      {client => {
-          console.log(client);
-          return (
-            <button >signout</button>
-          )
-      }}
+    {(client) => {
+      return <button onClick={() => handleSignout(client,history)}>signout</button>;
+    }}
   </ApolloConsumer>
 );
 
-export default Signout;
+export default withRouter(Signout);
