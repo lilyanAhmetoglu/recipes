@@ -50,7 +50,7 @@ const Root = ({ refetch ,session}) => (
       <Navbar session={session} />
       <Switch>
         <Route path="/" exact component={App} />
-        <Route path="/recipe/add" exact component={AddRecipe} />
+        <Route path="/recipe/add" render={() => <AddRecipe session={session}/>} />
         <Route path="/recipes/:_id" exact component={RecipePage} />
         <Route path="/profile" exact component={Profile} />
         <Route path="/search" exact component={Search} />
